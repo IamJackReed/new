@@ -1,29 +1,7 @@
+/* Disclaimer modal: matches site dark aesthetic + uses theme red */
+
 .disclaimer-page {
-  position: relative;
-  background: radial-gradient(circle at 20% 20%, rgba(255, 10, 22, 0.08), transparent 45%),
-    radial-gradient(circle at 80% 30%, rgba(255, 255, 255, 0.08), transparent 35%),
-    $primaryDark;
-  color: $accentDark;
   min-height: 100vh;
-  overflow: hidden;
-}
-
-.disclaimer-page::before,
-.disclaimer-page::after {
-  content: "";
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  z-index: 0;
-}
-
-.disclaimer-page::before {
-  background: linear-gradient(135deg, rgba(0, 0, 0, 0.75), rgba(20, 20, 20, 0.9));
-}
-
-.disclaimer-page::after {
-  background: url("../img/pixels.png") repeat;
-  opacity: 0.15;
 }
 
 .disclaimer-shell {
@@ -31,78 +9,119 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 2rem;
+  padding: rem(24);
   position: relative;
-  z-index: 1;
 }
 
-.disclaimer-card {
-  max-width: 700px;
+/* Background: subtle depth (keeps site look & feel) */
+.disclaimer-shell::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(
+      1200px 800px at 20% 10%,
+      rgba($themeColor, 0.12),
+      rgba(0, 0, 0, 0)
+    ),
+    linear-gradient(180deg, rgba($primaryDark, 0.97), rgba($primaryDark, 0.99));
+  z-index: -2;
+}
+
+/* Optional pixel texture if you have it */
+.disclaimer-shell::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background-image: url("../img/pixels.png");
+  background-repeat: repeat;
+  opacity: 0.08;
+  z-index: -1;
+  pointer-events: none;
+}
+
+.disclaimer-modal {
   width: 100%;
-  background: rgba(12, 12, 12, 0.9);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 12px;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
-  padding: 2rem 2.5rem;
-  backdrop-filter: blur(3px);
-  line-height: 1.7;
+  max-width: rem(860);
 }
 
-.disclaimer-card h1 {
-  font-size: 2rem;
-  margin: 0 0 1rem;
-  color: $accentDark;
+.disclaimer-modal__card {
+  background: rgba($primaryDark, 0.78);
+  border: 1px solid rgba($accentDark, 0.16);
+  border-radius: rem(18);
+  padding: rem(28);
+  box-shadow: 0 rem(16) rem(60) rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(10px);
 }
 
-.disclaimer-card p {
-  margin: 0 0 1.25rem;
-  color: rgba(255, 255, 255, 0.9);
-}
-
-.disclaimer-card button,
-.disclaimer-card .button {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  padding: 0.9rem 1.4rem;
-  background: $themeColor;
-  color: #0b0b0b;
-  border: none;
-  border-radius: 999px;
+.disclaimer-modal__title {
+  margin: 0 0 rem(12);
   font-weight: 700;
-  letter-spacing: 0.02em;
+  letter-spacing: -0.02em;
+}
+
+.disclaimer-modal__text {
+  margin: 0 0 rem(18);
+  color: rgba($accentDark, 0.9);
+  line-height: 1.65;
+}
+
+.disclaimer-modal__subhead {
+  margin: 0 0 rem(10);
+}
+
+.disclaimer-modal__list {
+  margin: 0 0 rem(18);
+  padding-left: rem(18);
+  color: rgba($accentDark, 0.92);
+  line-height: 1.65;
+}
+
+.disclaimer-modal__list li + li {
+  margin-top: rem(6);
+}
+
+.disclaimer-modal__fine {
+  margin: 0 0 rem(22);
+  color: rgba($accentDark, 0.8);
+}
+
+.disclaimer-modal__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: rem(12);
+  align-items: center;
+}
+
+.disclaimer-modal__primary {
+  background: $themeColor; /* site red */
+  color: #fff;
+  border: 0;
+  border-radius: rem(10);
+  padding: rem(12) rem(16);
+  font-weight: 700;
   cursor: pointer;
-  transition: transform 150ms ease, box-shadow 150ms ease, background 150ms ease;
+}
+
+.disclaimer-modal__primary:hover {
+  filter: brightness(1.05);
+}
+
+.disclaimer-modal__secondary {
+  color: rgba($accentDark, 0.92);
+  border: 1px solid rgba($accentDark, 0.25);
+  padding: rem(10) rem(14);
+  border-radius: rem(10);
   text-decoration: none;
 }
 
-.disclaimer-card button:hover,
-.disclaimer-card button:focus-visible,
-.disclaimer-card .button:hover,
-.disclaimer-card .button:focus-visible {
-  background: lighten($themeColor, 4%);
-  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.2);
-  transform: translateY(-1px);
+.disclaimer-modal__secondary:hover {
+  border-color: rgba($accentDark, 0.5);
+  color: #fff;
 }
 
-.disclaimer-card button:focus-visible,
-.disclaimer-card .button:focus-visible {
-  outline: 2px solid $accentDark;
+/* Keyboard accessibility */
+.disclaimer-modal__primary:focus-visible,
+.disclaimer-modal__secondary:focus-visible {
+  outline: 3px solid rgba($themeColor, 0.6);
   outline-offset: 3px;
-}
-
-.disclaimer-card button:active,
-.disclaimer-card .button:active {
-  transform: translateY(0);
-}
-
-@media (max-width: 600px) {
-  .disclaimer-card {
-    padding: 1.75rem 1.5rem;
-  }
-
-  .disclaimer-card h1 {
-    font-size: 1.6rem;
-  }
 }
