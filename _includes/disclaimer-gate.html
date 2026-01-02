@@ -1,0 +1,47 @@
+<script>
+  (function () {
+    // Versioned key so you can force everyone to re-accept if needed (bump v1 -> v2)
+    var ACCEPT_KEY = 'disclaimerAccepted:v1';
+    var REDIRECT_KEY = 'postDisclaimerRedirect';
+
+    // Jekyll injects baseurl (e.g. "/reed" on GitHub Pages project sites)
+    var BASEURL = '{{ site.baseurl | default: "" }}';
+
+    // Paths that should never be blocked
+    var ALLOW_PREFIXES = [
+      (BASEURL + '/disclaimer/').replace(/\/\/+$/, '/')
+    ];
+
+    // Current path (no query/hash)
+    var path = window.location.pathname;
+
+    // Normalize for comparison
+    function startsWithAnyPrefix(p) {
+      for (var i = 0; i < ALLOW_PREFIXES.length; i++) {
+        if (p.indexOf(ALLOW_PREFIXES[i]) === 0) return true;
+      }
+      return false;
+    }
+
+    // If localStorage is blocked/unavailable (rare), fail open (don't brick the site).
+    var accepted = false;
+    try {
+      accepted = window.localStorage.getItem(ACCEPT_KEY) === 'true';
+    } catch (e) {
+      accepted = true;
+    }
+
+    // If not accepted, and we're not already on the disclaimer page, redirect.
+    if (!accepted && !startsWithAnyPrefix(path)) {
+      try {
+        var fullPath = window.location.pathname + window.location.search + window.location.hash;
+        window.sessionStorage.setItem(REDIRECT_KEY, fullPath);
+      } catch (e2) {
+        // ignore
+      }
+
+      var disclaimerUrl = (BASEURL + '/disclaimer/').replace(/\/\/+$/, '/');
+      window.location.replace(disclaimerUrl);
+    }
+  })();
+</script>

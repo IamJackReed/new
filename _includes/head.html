@@ -35,6 +35,9 @@
 
     <title>{{ title }}</title>
     <meta name="description" content="{{ description }}">
+    {% if page.robots %}
+        <meta name="robots" content="{{ page.robots }}">
+    {% endif %}
     {% if page.tags %}
         <meta name="keywords" content="{{ page.tags | join: ', ' }}">
     {% endif %}
@@ -100,4 +103,7 @@
     <script>
         document.querySelector('html').classList.remove('no-js');
     </script>
+
+    <!-- Disclaimer gate (forces first-time visitors to accept before browsing) -->
+    {% include disclaimer-gate.html %}
 </head>
