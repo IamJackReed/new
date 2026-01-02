@@ -1,4 +1,6 @@
 <head>
+    {% include disclaimer-gate.html %}
+
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -103,7 +105,4 @@
     <script>
         document.querySelector('html').classList.remove('no-js');
     </script>
-
-    <!-- Disclaimer gate (forces first-time visitors to accept before browsing) -->
-    {% include disclaimer-gate.html %}
 </head>
