@@ -1,34 +1,36 @@
 <script>
-  (function () {
-    const disclaimerUrl = "{{ '/disclaimer/' | relative_url }}";
+(function () {
+  var ACCEPT_KEY = "disclaimerAccepted:v1";
+  var REDIRECT_KEY = "postDisclaimerRedirect";
 
-    function normalizePath(path) {
-      if (!path) return '/';
-      return path.replace(/\/+$/, '') || '/';
-    }
+  // IMPORTANT: relative_url respects baseurl (/new)
+  var disclaimerUrl = "{{ '/disclaimer/' | relative_url }}";
 
-    var normalizedDisclaimer = normalizePath(disclaimerUrl);
-    var normalizedCurrent = normalizePath(window.location.pathname);
+  function norm(p) {
+    return (p || "").replace(/\/+$/, "");
+  }
 
-    var accepted = false;
-    try {
-      accepted = localStorage.getItem('disclaimerAccepted:v1') === 'true';
-    } catch (e) {
-      accepted = false;
-    }
+  // If localStorage blocked/unavailable, fail open (don’t brick site)
+  var accepted = false;
+  try {
+    accepted = window.localStorage.getItem(ACCEPT_KEY) === "true";
+  } catch (e) {
+    accepted = true;
+  }
+  if (accepted) return;
 
-    if (accepted || normalizedCurrent === normalizedDisclaimer) {
-      return;
-    }
+  var here = norm(window.location.pathname);
+  var disclaimerHere = norm(disclaimerUrl);
 
-    var target = window.location.pathname + window.location.search + window.location.hash;
+  // Don’t redirect if already on disclaimer page
+  if (here === disclaimerHere) return;
 
-    try {
-      sessionStorage.setItem('postDisclaimerRedirect', target);
-    } catch (e) {
-      // sessionStorage may be unavailable; proceed to redirect
-    }
+  // Save intended destination
+  try {
+    var full = window.location.pathname + window.location.search + window.location.hash;
+    window.sessionStorage.setItem(REDIRECT_KEY, full);
+  } catch (e2) {}
 
-    window.location.href = disclaimerUrl;
-  })();
+  window.location.replace(disclaimerUrl);
+})();
 </script>
