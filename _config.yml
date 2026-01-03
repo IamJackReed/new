@@ -66,24 +66,6 @@ paginate_path: "/page/:num/"
 show_get_theme_btn: false
 use_logo: false
 
-# Content paginator
-paginate_content:
-  enabled: true
-  debug: false
-  collections:
-    - posts
-  auto: false
-  separator: "--page-break--"
-  permalink: "/:num/"
-  seo_canonical: true
-  properties:
-    part:
-      is_generated: true
-    last:
-      is_generated: true
-    single:
-      is_generated: true
-
 # SASS
 sass:
   style: compressed
@@ -91,7 +73,6 @@ sass:
 # Plugins
 plugins:
   - jekyll-paginate
-#  jekyll-paginate-content
 
 # Exclude my node related stuff
 exclude: [
